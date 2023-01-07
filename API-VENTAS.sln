@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaVentas.API", "..\SistemaVentas.API\SistemaVentas.API.csproj", "{02D3191C-56D8-4504-AB9D-326F75672DA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaVentas.BLL", "SistemaVentas.BLL\SistemaVentas.BLL.csproj", "{1568E800-99EA-485F-8E2B-87CE786A9E30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaVentas.DAL", "SistemaVentas.BLL\SistemaVentas.DAL.csproj", "{1568E800-99EA-485F-8E2B-87CE786A9E30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaVentas.DTO", "SistemaVentas.DTO\SistemaVentas.DTO.csproj", "{4FB00F66-51F5-4F0E-9BF5-BBECD7A5F2BC}"
 EndProject
