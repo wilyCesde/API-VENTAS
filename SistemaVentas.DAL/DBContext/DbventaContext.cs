@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace SistemaVentas.Model;
+namespace SistemaVentas.DAL.DBContext;
 
 public partial class DbventaContext : DbContext
 {
@@ -15,9 +15,9 @@ public partial class DbventaContext : DbContext
     {
     }
 
-    public virtual DbSet<Categorium> Categoria { get; set; }
+    public virtual DbSet<Categoria> Categoria { get; set; }
 
-    public virtual DbSet<DetalleVentum> DetalleVenta { get; set; }
+    public virtual DbSet<DetalleVenta> DetalleVenta { get; set; }
 
     public virtual DbSet<Menu> Menus { get; set; }
 
@@ -31,7 +31,7 @@ public partial class DbventaContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    public virtual DbSet<Ventum> Venta { get; set; }
+    public virtual DbSet<Venta> Venta { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -39,7 +39,7 @@ public partial class DbventaContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Categorium>(entity =>
+        modelBuilder.Entity<Categoria>(entity =>
         {
             entity.HasKey(e => e.IdCategoria).HasName("PK__Categori__8A3D240C922B3DAF");
 
@@ -57,7 +57,7 @@ public partial class DbventaContext : DbContext
                 .HasColumnName("nombre");
         });
 
-        modelBuilder.Entity<DetalleVentum>(entity =>
+        modelBuilder.Entity<DetalleVenta>(entity =>
         {
             entity.HasKey(e => e.IdDetalleVenta).HasName("PK__DetalleV__BFE2843F45D9CE39");
 
@@ -214,7 +214,7 @@ public partial class DbventaContext : DbContext
                 .HasConstraintName("FK__Usuario__idRol__2D27B809");
         });
 
-        modelBuilder.Entity<Ventum>(entity =>
+        modelBuilder.Entity<Venta>(entity =>
         {
             entity.HasKey(e => e.IdVenta).HasName("PK__Venta__077D561492892244");
 

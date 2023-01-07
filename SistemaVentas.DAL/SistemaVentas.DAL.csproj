@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="NewFolder\" />
+    <ProjectReference Include="..\SistemaVentas.Model\SistemaVentas.Model.csproj" />
   </ItemGroup>
 
 </Project>
