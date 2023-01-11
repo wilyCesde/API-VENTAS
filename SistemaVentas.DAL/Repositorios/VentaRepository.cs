@@ -4,7 +4,7 @@ using SistemaVentas.Model;
 
 namespace SistemaVentas.DAL.Repositorios
 {
-    partial class VentaRepository : GenericRepository<Venta>, IVentaRepository
+    public class VentaRepository : GenericRepository<Venta>, IVentaRepository
     {
         private readonly DbventaContext _dbcontext;
 
@@ -15,70 +15,61 @@ namespace SistemaVentas.DAL.Repositorios
 
         public async Task<Venta> Registrar(Venta modelo)
         {
-            Venta ventaGenerada = new Venta();
+            Venta ventaGenerada = new();
 
-            using (var transaction = _dbcontext.Database.BeginTransaction())
+            using var transaction = _dbcontext.Database.BeginTransaction();
+            try
             {
-                try
+                foreach (DetalleVenta dv in modelo.DetalleVenta)
                 {
-                    foreach (DetalleVenta dv in modelo.DetalleVenta)
-                    {
-                        Producto producto_encontrado = _dbcontext.Productos.Where
-                            (p => p.IdProducto == dv.IdProducto).First();
+                    Producto producto_encontrado = _dbcontext.Productos.Where
+                        (p => p.IdProducto == dv.IdProducto).First();
 
-                        producto_encontrado.Stock = producto_encontrado.Stock - dv.Cantidad;
-                        _dbcontext.Productos.Update(producto_encontrado);
-
-                    }
-
-                    await _dbcontext.SaveChangesAsync();
-
-                    NumeroDocumento correlativo = _dbcontext.NumeroDocumentos.First();
-                    correlativo.UltimoNumero = correlativo.UltimoNumero + 1;
-                    correlativo.FechaRegistro = DateTime.Now;
-
-                    _dbcontext.NumeroDocumentos.Update(correlativo);
-                    await _dbcontext.SaveChangesAsync();
-
-                    int CantidadDigitos = 4;
-                    string ceros = string.Concat(Enumerable.Repeat("0", CantidadDigitos));
-                    string numeroVenta = ceros + correlativo.UltimoNumero.ToString();
-
-                    numeroVenta = numeroVenta.Substring(numeroVenta.Length - CantidadDigitos, CantidadDigitos);
-
-                    //ACTUALIZAR NUEMRO DE DOCUMENTO
-
-                    modelo.NumeroDocumento = numeroVenta;
-
-                    //Acceder base de dtos 
-
-                    await _dbcontext.Venta.AddAsync(modelo);
-
-                    //guardar de anera asyncrona 
-
-                    await _dbcontext.SaveChangesAsync();
-
-                    //llamar vena generada pasmos el modelo
-
-                    ventaGenerada = modelo;
-                    transaction.Commit();
-
-
+                    producto_encontrado.Stock = producto_encontrado.Stock - dv.Cantidad;
+                    _dbcontext.Productos.Update(producto_encontrado);
 
                 }
-                catch
-                {
-                    transaction.Rollback();
-                    throw;
 
+                await _dbcontext.SaveChangesAsync();
 
+                NumeroDocumento correlativo = _dbcontext.NumeroDocumentos.First();
+                correlativo.UltimoNumero++;
+                correlativo.FechaRegistro = DateTime.Now;
 
+                _dbcontext.NumeroDocumentos.Update(correlativo);
+                await _dbcontext.SaveChangesAsync();
 
+                int CantidadDigitos = 4;
+                string ceros = string.Concat(Enumerable.Repeat("0", CantidadDigitos));
+                string numeroVenta = ceros + correlativo.UltimoNumero.ToString();
 
-                }
-                return ventaGenerada;
+                numeroVenta = numeroVenta.Substring(numeroVenta.Length - CantidadDigitos,
+                              CantidadDigitos);
+
+                //ACTUALIZAR NUEMRO DE DOCUMENTO
+
+                modelo.NumeroDocumento = numeroVenta;
+
+                //Acceder base de dtos 
+
+                await _dbcontext.Venta.AddAsync(modelo);
+
+                //guardar de anera asyncrona 
+
+                await _dbcontext.SaveChangesAsync();
+
+                //llamar vena generada pasmos el modelo
+
+                ventaGenerada = modelo;
+                transaction.Commit();
 
             }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
+            return ventaGenerada;
         }
     }
 }
