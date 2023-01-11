@@ -11,12 +11,10 @@ namespace SistemaVentas.IOC
 
         public static void InyectarDependencias(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<DbventaContext>(options =>
+            services.AddDbContext<DbventaContext>(Options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("cadenaSQL"));
+                Options.UseSqlServer(configuration.GetConnectionString("cadenaSQL"));
             });
         }
-
-
     }
 }

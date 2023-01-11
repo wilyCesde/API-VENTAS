@@ -4,14 +4,10 @@ using SistemaVentas.Model;
 
 namespace SistemaVentas.DAL.Repositorios
 {
-    public class VentaRepository : GenericRepository<Venta>, IVentaRepository
+    partial class VentaRepository : GenericRepository<Venta>, IVentaRepository
     {
-        //crear la variable 
-
         private readonly DbventaContext _dbcontext;
 
-
-        //generamos el contructor
         public VentaRepository(DbventaContext dbcontext) : base(dbcontext)
         {
             _dbcontext = dbcontext;
@@ -66,23 +62,23 @@ namespace SistemaVentas.DAL.Repositorios
 
                     ventaGenerada = modelo;
                     transaction.Commit();
-                    return ventaGenerada;
 
 
 
                 }
-                catch (Exception ex)
+                catch
                 {
                     transaction.Rollback();
-                    throw new Exception("Error al registrar la venta: " + ex.Message);
+                    throw;
 
 
 
 
 
                 }
+                return ventaGenerada;
+
             }
         }
-
     }
 }
